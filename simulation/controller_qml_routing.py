@@ -110,6 +110,11 @@ def main():
     print("Waiting for simulator...")
     sock=connect_to_sim(); step=upd=0; ep_r=0.0; lats=[]
 
+    import socket, json, time
+    udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    UDP_IP = "127.0.0.1"
+    UDP_PORT = 8081
+
     while True:
         data=recv_state(sock)
         if data is None: print("Connection closed"); break
@@ -131,6 +136,22 @@ def main():
         r=rew(state); ep_r+=r; step+=1
         if state[11]>0: lats.append(state[11])
         buf.store(state,route,r,val,lp.item())
+
+        time.sleep(0.2)
+        try:
+            udp_sock.sendto(json.dumps({
+                "time": float(state[14]),
+                "x": float(state[0]),
+                "y": float(state[1]),
+                "queue": int(state[2]),
+                "energy": float(state[3]),
+                "load0": float(state[4]),
+                "route": int(route),
+                "throughput_tasks": float(state[10]),
+                "latency": float(state[11]),
+                "algo": "qml"
+            }).encode(), (UDP_IP, UDP_PORT))
+        except Exception: pass
 
         if buf.size()>=BUFFER_SIZE:
             with torch.no_grad(): lv=critic(st).item()

@@ -111,6 +111,11 @@ def main():
     print("Waiting for simulator...")
     sock = connect_to_sim(); step = upd = 0; ep_r = 0.0
 
+    import socket, json, time
+    udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    UDP_IP = "127.0.0.1"
+    UDP_PORT = 8081
+
     while True:
         data = recv_state(sock)
         if data is None: print("Connection closed"); break
@@ -132,6 +137,22 @@ def main():
         r = rew(state); ep_r += r; step += 1
         buf_S.append(state); buf_A.append(route)
         buf_R.append(r); buf_V.append(val)
+
+        time.sleep(0.2)
+        try:
+            udp_sock.sendto(json.dumps({
+                "time": float(state[14]),
+                "x": float(state[0]),
+                "y": float(state[1]),
+                "queue": int(state[2]),
+                "energy": float(state[3]),
+                "load0": float(state[4]),
+                "route": int(route),
+                "throughput_tasks": float(state[10]),
+                "latency": float(state[11]),
+                "algo": "qrl"
+            }).encode(), (UDP_IP, UDP_PORT))
+        except Exception: pass
 
         # A2C update every 32 steps (no PPO clipping)
         if len(buf_R) >= 32:

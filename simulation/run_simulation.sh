@@ -11,6 +11,12 @@ PYTHON=python3
 
 mkdir -p "$RESULTS"
 
+# Start Live Web Telemetry Server
+pkill -9 -f "telemetry_server.py" 2>/dev/null || true
+python3 telemetry_server.py &
+TELEMETRY_PID=$!
+echo "  [Started Live Telemetry Relay on port 8080]"
+
 # Check if pennylane is available, else use venv
 if [ -d "$SIM_DIR/rl_env/bin" ]; then
     PYTHON="$SIM_DIR/rl_env/bin/python3"
@@ -117,3 +123,7 @@ printf "%-28s %12s %12s\n" "controller_drl" "1.08" "83.0"
 printf "%-28s %12s %12s\n" "controller_qrl (Sasinda)" "1.07" "89.7"
 printf "%-28s %12s %12s\n" "controller_qml_routing" "0.70" "94.2"
 echo "================================================"
+
+# Kill Telemetry Relay
+kill -9 $TELEMETRY_PID 2>/dev/null || true
+echo "  [Live Telemetry Closed]"

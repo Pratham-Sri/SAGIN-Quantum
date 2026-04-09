@@ -1,0 +1,43 @@
+# Python & Core Simulation
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.env
+.venv
+rl_env/
+venv/
+ENV/
+*.pt
+*.npy
+
+# Vite & React Visualizer
+node_modules/
+dist/
+dist-ssr/
+*.local
+.DS_Store
+.vscode/
+
+# Build logs and temporaries
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

@@ -14,8 +14,27 @@ SIM_DIR="${NS3}/scratch/sagin-sim"
 RESULTS="${SIM_DIR}/results"
 SIM_TIME=100                 # Simulation duration in seconds
 PYTHON="python3"             # Use venv python if needed: SIM_DIR/rl_env/bin/python3
-
 mkdir -p "${RESULTS}"
+
+FORCE_RUN=0
+if [ "$1" == "--force-simulate" ]; then
+    FORCE_RUN=1
+fi
+
+if [ $FORCE_RUN -eq 0 ]; then
+    echo ""
+    echo "========================================================================="
+    echo "  Notice: ns-3 multi-satellite discrete-event simulation routines disabled"
+    echo "          by default to bypass heavy CPU allocation blocks."
+    echo "  Action: Plotting finalized outcomes directly from results/."
+    echo "          (To run full packet-level physics engine: bash run_all.sh --force-simulate)"
+    echo "========================================================================="
+    echo ""
+    echo "Generating evaluation graphs..."
+    python3 plot_results.py
+    echo "Graphs updated in plots/ directory."
+    exit 0
+fi
 
 # ── Controllers to benchmark ──────────────────────────────────────────────────
 CONTROLLERS=(

@@ -138,7 +138,7 @@ def main():
         buf_S.append(state); buf_A.append(route)
         buf_R.append(r); buf_V.append(val)
 
-        time.sleep(0.2)
+        time.sleep(0.1)
         try:
             udp_sock.sendto(json.dumps({
                 "time": float(state[14]),

@@ -66,7 +66,7 @@ for CTRL in "${CONTROLLERS[@]}"; do
 
     # Run Python controller
     cd "$SIM_DIR"
-    timeout $((SIM_TIME + 25)) $PYTHON "${CTRL}.py" \
+    timeout 1200 $PYTHON "${CTRL}.py" \
         > "/tmp/ctrl_${CTRL}.log" 2>&1 || true
 
     wait $SIM_PID 2>/dev/null || true

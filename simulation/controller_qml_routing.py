@@ -137,7 +137,7 @@ def main():
         if state[11]>0: lats.append(state[11])
         buf.store(state,route,r,val,lp.item())
 
-        time.sleep(0.2)
+        time.sleep(0.1)
         try:
             udp_sock.sendto(json.dumps({
                 "time": float(state[14]),
